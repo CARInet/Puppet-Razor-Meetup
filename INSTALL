@@ -1,0 +1,90 @@
+For the purpose of this demonstration, we will be using mostly default settings
+Using a hiera based configuration
+
+Base Centos 6.6 install
+
+Install puppet repo
+yum install http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm 
+
+Install puppet
+yum install puppet
+
+Create a git directory to manage puppet codebase from
+git clone https://github.com/CARInet/Puppet-Razor-Meetup.git
+
+Install the modules we're going to need
+puppet module install maestrodev-rvm
+puppet module install puppetlabs-postgresql
+puppet module install reidmv-yamlfile
+
+
+remove base puppet config file
+rm /etc/puppet/puppet.conf
+
+Set up folder structure
+mkdir /etc/puppet/manifests
+ln -s <repo path>/puppet-code /
+ln -s <repo path>/razor-code /
+
+symlink the custom modules into the modules directory as well as config files
+ln -s /puppet-code/hosts /etc/puppet/modules/
+ln -s /puppet-code/razor /etc/puppet/modules/
+ln -s /puppet-code/profiles /etc/puppet/modules/
+ln -s /puppet-code/roles /etc/puppet/modules/
+ln -s /puppet-code/puppet.conf /etc/puppet/
+ln -s /puppet-code/site.pp /etc/puppet/manifests/
+
+Set up hiera
+ln -s /puppet-code/hiera/hiera.yaml /etc/puppet
+ln -s /puppet-code/hiera /etc/puppet/hieradata
+
+Edit /etc/hosts and add in entries pointing puppet and puppetca to the puppet master
+Set up puppet master cert
+puppet master --no-daemonize
+
+Run master
+puppet master
+
+Run initial puppet config
+puppet apply /etc/puppet/manifests/site.pp
+
+Change ownership of razor repo-store
+chown -R razor:razor /etc/puppet/razor/repo-store
+
+Restart system so that rvm environments load
+init 6
+
+CONFIGURE RAZOR
+
+Ensure command line is using proper ruby version
+rvm use 1.9.3
+
+Initialize razor db:
+razor-admin -e production migrate-database
+
+Set up tftp boot and micro kernel
+cd /etc/puppet/razor/repo-store
+wget http://links.puppetlabs.com/razor-microkernel-latest.tar
+tar -xf razor-microkernel-latest.tar
+rm razor-microkernel-latest.tar
+chown -R razor:razor microkernel/
+cd /etc/puppet/razor/tftpboot
+wget http://boot.ipxe.org/undionly.kpxe
+wget http://192.168.1.100:8080/api/microkernel/bootstrap?nic_max=10
+mv bootstrap\?nic_max\=10 bootstrap.ipxe 
+
+cd /razor-code
+
+Add example task:
+ln -s /razor-code/tasks/example.task /opt/razor/tasks/
+
+Set up razor repos, policies, etc
+cd /razor-code
+razor create-repo --json repos/centos6.json
+razor create-tag --json tags/ram-2G.json
+razor create-tag --json tags/ram-4G.json
+razor create-tag --json tags/cpu-4.json
+razor create-tag --json tags/cpu-2.json
+razor create-tag --json tags/virtual.json
+razor create-broker --json brokers/default.json
+razor create-policy --json policies/default.json
