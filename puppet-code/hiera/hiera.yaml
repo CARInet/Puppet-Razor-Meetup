@@ -1,0 +1,12 @@
+---
+:backends:
+  - json
+
+:hierarchy:
+  - "nodes/%{::clientcert}" # node specific data
+  - "roles/%{hiera('role')}" # role specific data
+  - "os/%{::operatingsystem}"
+  - defaults
+
+:json:
+  :datadir: /etc/puppet/hieradata

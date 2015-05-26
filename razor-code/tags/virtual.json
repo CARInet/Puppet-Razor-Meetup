@@ -1,0 +1,4 @@
+{
+	"name": "virtual",
+	"rule": ["=", ["fact", "is_virtual"], "true"]
+}

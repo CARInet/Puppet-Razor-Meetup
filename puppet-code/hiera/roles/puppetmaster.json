@@ -1,0 +1,92 @@
+{
+        "hosts::entries": {
+                "192.168.1.100": "puppet puppetca"
+        },
+
+        "shared_storage": "/etc/puppet",
+        "shared_ip": "192.168.1.100",
+
+        "pgsql_user": "razor",
+        "pgsql_pass": "wEg^3poKs$",
+
+        "puppet::master::dns_alt_names": [
+                "puppet",
+                "puppetca"
+        ],
+
+        "rvm::system_rubies": {
+                "ruby-1.9.3": {
+                        "default_use": true
+                },
+                "ruby-1.8.7": {}
+        },
+
+        "rvm::system_users": [
+                "razor",
+                "puppet"
+        ],
+
+        "rvm::rvm_gems": {
+                "razor-client": {
+                        "name": "razor-client",
+                        "ruby_version": "ruby-1.9.3",
+                        "ensure": "latest"
+                }
+        },
+
+        "puppet::master::autosign": true,
+        "puppet::master::puppet_ssldir": "%{hiera('shared_storage')}/ssl",
+
+        "razor::shared_ip": "%{hiera('shared_ip')}",
+        "razor::db_user": "%{hiera('pgsql_user')}",
+        "razor::db_password": "%{hiera('pgsql_pass')}",
+        "razor::rest_client_options":["-v", "<1.7"],
+        "razor::razor_shared": "%{hiera('shared_storage')}/razor",
+
+        "profiles::postgresql::datadir": "%{hiera('shared_storage')}/postgresql-data",
+        "profiles::postgresql::listen": "192.168.1.100",
+        "profiles::postgresql::user": "%{hiera('pgsql_user')}",
+        "profiles::postgresql::password": "%{hiera('pgsql_pass')}",
+        "profiles::postgresql::hba_rules": {
+                "internal": {
+                        "type": "host",
+                        "database": "%{hiera('pgsql_user')}",
+                        "user": "%{hiera('pgsql_user')}",
+                        "auth_method": "md5",
+                        "address": "192.168.1.0/24",
+                        "description": "Allow access from internal subnet"
+                }
+        },
+
+        "profiles::dnsmasq::tftp_root":"%{hiera('shared_storage')}/razor/tftpboot",
+        "profiles::dnsmasq::template":"dnsmasq.conf.erb",
+        "profiles::dnsmasq::config_entries":{
+                "expand-hosts": "",
+                "localise-queries": "",
+                "domain-needed": "",
+                "enable-tftp": "",
+                "bind-interfaces": "",
+                "dhcp-broadcast": "",
+                "dhcp-no-override": "",
+                "dhcp-range": [
+                        "192.168.1.50,192.168.1.99,12h"
+                ],
+                "tftp-root": "%{hiera('profiles::dnsmasq::tftp_root')}",
+                "listen-address": [
+                        "192.168.1.100"
+                ],
+                "interface": [
+                        "eth0"
+                ],
+                "dhcp-match": "IPXEBOOT,175",
+                "dhcp-boot": [
+                        "net:IPXEBOOT,bootstrap.ipxe",
+                        "undionly.kpxe"
+                ],
+                "dhcp-option": [
+                        "3,192.168.1.100"
+                ],
+                "dhcp-leasefile": "%{hiera('shared_storage')}/dnsmasq.leases"
+        }
+
+}

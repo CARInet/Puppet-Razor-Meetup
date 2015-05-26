@@ -1,0 +1,21 @@
+<%
+if @config_entries
+        @config_entries.sort_by {|k,v| k.to_s }.each do |key,value|
+                if value.kind_of?(Array)
+                        value.sort.each do |option|
+-%>
+<%= key %>=<%= option %>
+<%
+                        end
+                elsif value.length > 0
+-%>
+<%= key %>=<%= value %>
+<%
+                else
+-%>
+<%= key %>
+<%
+                end
+        end
+end
+-%>

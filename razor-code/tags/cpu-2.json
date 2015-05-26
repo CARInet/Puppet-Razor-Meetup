@@ -1,0 +1,4 @@
+{
+	"name": "cpu-2",
+	"rule": ["=", ["fact", "processorcount"], "2"]
+}

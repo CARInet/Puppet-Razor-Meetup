@@ -1,0 +1,7 @@
+{
+    "name": "default",
+    "configuration": {
+       "server":      "puppet"
+    },
+    "broker-type": "puppet"
+}

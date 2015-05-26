@@ -1,0 +1,8 @@
+{
+	"name": "ram-2G",
+	"rule": [
+		"and",
+			["<",["num",["fact", "memorysize_mb"]], 2200],
+			[">",["num",["fact", "memorysize_mb"]], 1900]
+	]
+}

@@ -1,0 +1,11 @@
+127.0.0.1       localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1             localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+<% if @entries
+        @entries.sort_by {|k,v| k.to_s }.each do |ip,domain|
+-%>
+<%= ip %>       <%= domain %>
+<%
+        end
+end
+-%>

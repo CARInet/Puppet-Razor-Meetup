@@ -1,0 +1,11 @@
+{
+  "name": "default",
+  "repo": "centos6",
+  "task": "example",
+  "broker": "default",
+  "enabled": true,
+  "hostname": "vm${id}",
+  "max_count": 9999,
+  "root_password": "puppet",
+  "tags": ["virtual"]
+}
