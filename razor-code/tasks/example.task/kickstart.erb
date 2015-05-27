@@ -9,7 +9,7 @@ lang en_US.UTF-8
 keyboard us
 rootpw razor
 network --hostname <%= node.metadata.key?('hostname') ? node.metadata['hostname'] : node.hostname %>
-firewall --enabled --ssh
+firewall --enabled --ssh --http
 selinux --permissive
 authconfig --enableshadow --passalgo=sha512 --enablefingerprint
 timezone America/Los_Angeles
