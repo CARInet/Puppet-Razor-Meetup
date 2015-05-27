@@ -63,7 +63,6 @@
         "profiles::dnsmasq::config_entries":{
                 "expand-hosts": "",
                 "localise-queries": "",
-                "domain-needed": "",
                 "enable-tftp": "",
                 "bind-interfaces": "",
                 "dhcp-broadcast": "",

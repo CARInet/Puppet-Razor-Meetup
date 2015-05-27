@@ -5,6 +5,10 @@ class profiles::dnsmasq (
 	$package = "dnsmasq-2.65-1.el6.rfx.x86_64.rpm"
 ) {
 
+	# Using a newer version of DNSmasq to allow for DHCP broadcasting.
+	# This resolves some issues when using libvirt with openvswitch
+	# and vlan tagging.
+
 	file { "/usr/local/src/${package}":
 		source => "puppet:///modules/profiles/${package}"
 	}

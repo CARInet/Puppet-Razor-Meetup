@@ -4,6 +4,7 @@
 
 :hierarchy:
   - "nodes/%{::clientcert}" # node specific data
+  - "roles/default"
   - "roles/%{hiera('role')}" # role specific data
   - "os/%{::operatingsystem}"
   - defaults
